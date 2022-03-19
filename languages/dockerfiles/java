@@ -1,0 +1,5 @@
+FROM openjdk:11
+
+RUN apt-get update
+
+CMD ["../scripts/java.sh"]
