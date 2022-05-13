@@ -16,6 +16,9 @@ nodemon
 
 # running the server
 node index.js
+
+# As soon as the server starts, it will begin downloading all of the required docker images. The progress of the download will be displayed in the console. No code can be run until all of the docker images have been pulled. 
+
 ```
 ## Configuration
 
