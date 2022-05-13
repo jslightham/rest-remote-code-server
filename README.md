@@ -2,9 +2,9 @@
 Remote code execution in isolated docker containers controlled through a REST interface. Automatically build images, and create, start, and remove containers.
 
 ## Running Application
-If you would like to run the application you need:
-1. NodeJS 16
-2. Docker
+If you would like to run the application you need to start by first installing:
+1. NodeJS 16 or later - https://nodejs.org/en/download/
+2. Docker - https://docs.docker.com/engine/install/ubuntu/
 
 Clone the repository, and run the following:
 ```

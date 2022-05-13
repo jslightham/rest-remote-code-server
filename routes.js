@@ -26,12 +26,18 @@ router.route('/run').post(async (req, res) => {
         stream.on('data', (chunk) => { res.write(chunk.toString(), 'utf8') });
         stream.on('end', () => { res.end() });
         await sleep(5000);
+        container = docker.getContainer(container.name);
         if (container.status == 'running') {
             await container.kill();
         }
         await container.remove();
         await fs.unlinkSync(`./temp/${randomName}`);
     } catch (err) {
+        try{
+            await container.remove();
+        } catch (err) {
+
+        }
         console.log(err);
     }
 });
