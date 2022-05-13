@@ -17,16 +17,20 @@ router.route('/run').post(async (req, res) => {
         }
         let randomName = Math.random().toString(36).substring(7);
         await fs.writeFileSync(`./temp/${randomName}`, req.body.code);
-        const container = await docker.createContainer({ Image: language.docker, Cmd: ['./run.sh'], name: randomName });
+        let container = await docker.createContainer({ Image: language.docker, Cmd: ['./run.sh'], name: randomName });
         await exec(`docker cp ./temp/${randomName} ${container.id}:${language.file} && docker cp ./languages/${language.script} ${container.id}:run.sh`);
         container.start();
-        const stream = await container.attach({ stream: true, stdout: true, stderr: true });
         res.status(200);
         res.setHeader('content-type', 'text/html');
-        stream.on('data', (chunk) => { res.write(chunk.toString(), 'utf8') });
+        const stream = await container.attach({ stream: true, stdin: true, stdout: true, stderr: true });
+        stream.setEncoding('utf8');
+        stream.on('data', (chunk) => {
+            res.write((chunk.toString() + "").replace(0, "").substring(8), 'utf8');
+        });
+
         stream.on('end', () => { res.end() });
         await sleep(5000);
-        container = docker.getContainer(container.name);
+        container = docker.getContainer(container.id);
         if (container.status == 'running') {
             await container.kill();
         }

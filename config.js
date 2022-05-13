@@ -33,4 +33,9 @@ config.ssl.key = "/etc/letsencrypt/live/jslightham.com/privkey.pem";
 config.ssl.cert = "/etc/letsencrypt/live/jslightham.com/cert.pem";
 config.ssl.ca = "/etc/letsencrypt/live/jslightham.com/chain.pem";
 
+
+// The port that the server should run on.
+config.httpsPort = 4000;
+config.httpPort = 4040;
+
 module.exports = config;

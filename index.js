@@ -38,7 +38,6 @@ for (const property in config.languages) {
         if (err) {
             console.log(err);
         }
-        stream.pipe(process.stdout);
     });
 }
 
@@ -46,10 +45,10 @@ for (const property in config.languages) {
 const httpServer = http.createServer(app);
 const httpsServer = https.createServer(credentials, app);
 
-httpServer.listen(4040, () => {
-        console.log('HTTP Server running on port 8080');
+httpServer.listen(config.httpPort, () => {
+        console.log(`HTTP Server running on port ${config.httpPort}`);
 });
 
-httpsServer.listen(4000, () => {
-        console.log('HTTPS Server running on port 8000');
+httpsServer.listen(config.httpsPort, () => {
+        console.log(`HTTPS Server running on port ${config.httpsPort}`);
 });
