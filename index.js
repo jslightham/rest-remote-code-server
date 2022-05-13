@@ -5,9 +5,21 @@ const express = require("express");
 const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const fs = require('fs');
 
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
+
+// Load certs from the config file.
+const privateKey = fs.readFileSync(config.ssl.key, 'utf8');
+const certificate = fs.readFileSync(config.ssl.cert, 'utf8');
+const ca = fs.readFileSync(config.ssl.ca, 'utf8');
+
+const credentials = {
+        key: privateKey,
+        cert: certificate,
+        ca: ca
+};
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -28,6 +40,14 @@ for (const property in config.languages) {
     });
 }
 
-app.listen(8000, () => {
-    console.log("Express listening on port 8000");
-})
+// Starting both http & https servers
+const httpServer = http.createServer(app);
+const httpsServer = https.createServer(credentials, app);
+
+httpServer.listen(4040, () => {
+        console.log('HTTP Server running on port 8080');
+});
+
+httpsServer.listen(4000, () => {
+        console.log('HTTPS Server running on port 8000');
+});
